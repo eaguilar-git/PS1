@@ -1,7 +1,7 @@
 ---
-title: "Literate Programming"
-author: "Austin Hart"
-date: January 22
+title: "Problem Set 1"
+author: "Edgar Aguilar"
+date: January 24
 output: pdf_document
 ---
 
@@ -10,7 +10,7 @@ output: pdf_document
 # for handling code, plots, etc in your doc.
   knitr::opts_chunk$set(
     eval = TRUE,
-    echo = FALSE, 
+    echo = TRUE, 
     warning = FALSE, 
     message = FALSE,
     fig.align = 'center'
@@ -21,85 +21,23 @@ output: pdf_document
   library(tidyverse)
   library(kableExtra)
 
-  df = read_csv('trash_wheels.csv')
+# Import the Afrobarometer dataset
+df1 <- read_csv('output file.csv')
+
 ```
 
 
-## Literate programming with R Markdown
-This is an R Markdown document. Markdown is a simple markup language for authoring reports, slide decks, websites, and more. Critically, it allows you to integrate code (`R`, `python`, `html`, etc) into the body text of your work. This combination of coding and typesetting is called "literate programming."
+# Answers to questions
 
+## Question #1
+- I am using the data set from Congo-Brazzaville. 
+- The survey includes information from `r length(unique(df1$RESPNO))` respondents.
+- The responses were collected between `r min(df1$DATEINTR)` and `r max(df1$DATEINTR)`.
 
-### Markdown resources  
-There are a number of excellent, stand-alone resources on Markdown. Yihui Xie's [R Markdown: The Definitive Guide](https://bookdown.org/yihui/rmarkdown/), for example, covers installation, documents, slide presentations, and much more. 
+## Question #2
 
-<!-- This is a comment in markdown.
-Does it do line breaks?
-Yes it does.-->
-<!-- shift + command/ctrl + c to comment -->
+## Question #3
 
-### Workflow  
-When you're ready to start communicating findings through a report or slide presentation, try the following: 
+## Question #4
 
-1. Create a new `.Rmd` file and a new `.R` script in your project folder.  
-1. Use the `.R` script to test out and write initial code.  
-1. Outline the `.Rmd` document (all headers and sub headers).  
-1. Paste the final code chunks into the `.Rmd` doc, and test them.  
-7. Write the main body text.  
-
-## Markdown structure 
-Markdown documents (`.Rmd` files) have three parts:
-
-- *YAML metadata* defining the document parameters
-  - Specify author, title, date, etc
-  - Set output type: HTML, PDF, MS Word, etc
-- *R code chunks* to execute on `Knit`
-- *Body text*
-
-When you `Knit` your R markdown document, `knitr` and `pandoc` work together to generate a file that includes written content and the output of any code (e.g., figures and tables). 
-
-### Code chunks 
-You can embed code chunks like this:
-
-```{r tab1}
-  df %>%
-    group_by(wheel) %>%
-    summarise(
-      Min = min(weight_tons),
-      Mean = mean(weight_tons),
-      Max = max(weight_tons)
-    ) %>%
-    kable(
-      caption = 'Trash weight (tons) by wheel', 
-      digits = 1L,
-      format = 'latex',
-      booktabs = TRUE
-    )
-```
-
-Every code chunk begins and ends with the triple back tick, and you must specify that the code included in the chunk is `r` code. When you `knit`, or render, the document, `knitr` processes the code and displays the output (see Table 1 above).
-
-You can also integrate code directly into the text. For example, the `trash_wheels` data includes records for `r nrow(df)` total bins with a maximum recorded weight of `r max(df$weight_tons)`.
-
-
-### Including Plots
-Plots generated from code chunks are placed directly in the document. For example:
-
-```{r, fig.width = 3, fig.asp = 0.618, fig.cap='Weights by wheel'}
-  df %>%
-    ggplot(aes(x = wheel, y = weight_tons)) +
-    geom_boxplot() +
-    theme_minimal()
-```
-
-
-## Hard things (at first)
-
-### Line breaks 
-Line breaks require two spaces. New paragraphs need two hard returns.
-When I `knit`, this line gets sucked into the one above. If I add two spaces and return at the end of the line, then  
-I become a new line all to myself. If I want a whole new paragraph, I need two hard returns.
-
-Now I'm a new paragraph. 
-
-### Knitting and errors
-`Knit` often! Write a bit and `Knit`. Code a bit and `Knit`. Check every code chunk.
+## Question #5
