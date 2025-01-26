@@ -1,27 +1,51 @@
 #+ Statistical programming in R
-#+ Austin Hart
+#+ Edgar Aguilar, PS 1
 #+ Spring 2024
 
+
+#+ Questions from assignment:
+#+ Briefly describe the dataset. What country did you choose? How many respondents
+#+ are there in the survey, and when were the interviews conducted?
+#+ Describe your respondents. Using appropiate descriptive statistics, tell me about
+#+ their ages, distribution of male vs female, language, etc. Refer to the codebook
+#+ to find questions you feel are appropiate here. BONUS: compose a single table with
+#+ relevant statistics describing the sample.
+#+ Describe attitudes about economic and political influence of China, Q78A in your
+#+ data. Your answer should indicate a relative frequency table and a couple of quick
+#+ sentences describing the results.
+#+ Repeat this process for Q78 B about the influence of the United States.
+#+ Use a paired t-test to evaluate the difference between perceptions. To do this, 
+#+ you will need to clean both variables to exclude dk/na and refusals. See the
+#+ example code below, but note that you may need to adjust depending the method
+#+ you used to read in the data. Describe your findings. Use a two-tailed test and 
+#+ 5% significance. 
 
 # Packages ---------------------------------
 # attaching a library (for installed package)
   library(tidyverse)
 
+  install.packages("haven")
+  
+  library(haven)
+  
 # access a function on the fly
-  df <- readr::read_csv('trash_wheels.csv')
+  df <- haven::read_sav('Congo_Round9.sav')
 
 
 # Data I/O ---------------------------------
 # Import our trash wheel data
-  df <- read_csv('trash_wheels.csv')
+  data <- read_sav('Congo_Round9.sav')
 
+  # View the data
+  head(df)  
+  
 # compare two alternatives:
   read_csv(file = 'trash_wheels.csv')
   df2 <- read_csv(file = 'trash_wheels.csv')
 
 # Output
-  save(df1, 'newdata.RData')
-  write_csv(df1, 'newdata.csv')  
+  save(df, 'newdata.RData')
+  write_csv(df, 'newdata.csv')  
 
 #+ WARNINGS: 
 #+    Please avoid read.csv() 
