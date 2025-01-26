@@ -23,6 +23,7 @@ save(df, file = 'newdata.Rdata')
 df1 <- read_csv('output file.csv')
 
 # Getting to know the data ----
+# names of columns
 colnames(df1)
 
 # View the first few entries
@@ -34,20 +35,25 @@ summary(df1$RESPNO)
 summary(df1$DATEINTR)
 
 # Question 1 ----
-# write down country: Congo
+## Country  ----
+# Chosen from website: "Congo-Brazzaville"
+
+## Number of Respondents ----
 
 # To get how many respondants, Count unique values in RESPNO
 length(unique(df1$RESPNO))
 
-# When responses were collected
+## Time of Survey ----
+# When responses were collected, get earliest and latest date
 min(df1$DATEINTR)
 max(df1$DATEINTR)
 
+
 # Question 2 ----
 ## describe respondants: ages, male vs. female (Q100), language, 
-# columns: REGION, URBRUR, Q1 (age), Q2 (language)
+# columns: REGION, URBRUR, Q1 (age), Q2 (language), gender (Q100)
 
-#Age
+## Age ----
 # Create a tibble from the summary of Age (Q1)
 age_summary <- tibble(
   Statistic = c("Min", "1st Quartile", "Median", "Mean", "3rd Quartile", "Max"),
@@ -57,8 +63,8 @@ age_summary <- tibble(
 # Display the tibble
 age_summary
 
-# Gender
-# Show unique values in the GENDER column -- 1 = Man 2 = Woman
+## Gender ----
+# Show unique values in the GENDER column -- 1 = Man 2 = Woman. -- to check data looks good.
 unique(df1$Q100)
 
 # Replace 1 with "Man" and 2 with "Woman", and calculate percentages
@@ -75,7 +81,11 @@ gender_tibble <- df1 %>%
 # Display the tibble
 gender_tibble
 
-# REGION
+## Region ----
+### 1780=Brazzaville, 1781=Pointe-Noire, 1872=Kouilou, 1783=Niari, 1784=Bouenza, 
+### 1785=Lekoumou, 1786=Pool, 1787=Plateaux, 1788=Cuvette, 1789=Cuvette Ouest, 
+### 1790=Sangha, 1791=Likouala 
+
 unique(df1$REGION)
 
 region_tibble <- df1 %>%
@@ -101,10 +111,8 @@ region_tibble <- df1 %>%
 # Display the tibble
 region_tibble
 
-### 1780=Brazzaville, 1781=Pointe-Noire, 1872=Kouilou, 1783=Niari, 1784=Bouenza, 
-### 1785=Lekoumou, 1786=Pool, 1787=Plateaux, 1788=Cuvette, 1789=Cuvette Ouest, 
-### 1790=Sangha, 1791=Likouala 
 
+## Location ----
 # URBRUR-- 1 = Urban, 2 - Rural
 unique(df1$URBRUR)
 
@@ -122,6 +130,7 @@ urbrur_tibble <- df1 %>%
 # Display the tibble
 urbrur_tibble
 
+## Language ----
 # Language (Q2)
 ## 2=Français, 1780=Lingala, 1781=Kituba, 1782=Lari, 1783=Teke, 
 ## 9998=A refusé de répondre, 9999=Ne sait pas, -1=Manquant 
@@ -150,9 +159,9 @@ language_tibble <- df1 %>%
 # Display the tibble
 language_tibble
 
-#### combine
 
-# ---- Combine All Tibbles ----
+## Summary Disriptive Statistics ----
+# combine tibbles
 summary_table <- bind_rows(
   gender_tibble,
   region_tibble,
@@ -160,7 +169,7 @@ summary_table <- bind_rows(
   language_tibble
 )
 
-# ---- Display the Final Table ----
+# Display the Final Table 
 # As plain tibble
 summary_table
 
@@ -175,7 +184,7 @@ updated_summary_table <- summary_table %>%
 # Display the updated table
 updated_summary_table
 
-#### QUESTION 3
+# Question 3 ----
 China_attitudes_frequency <- df1 %>%
   count(Q78A, name = "Count") %>%
   mutate(
@@ -193,10 +202,10 @@ China_attitudes_frequency <- df1 %>%
   ) %>%
   select(Response, Count, Percentage)
 
-# Display the table
+# Display the table China
 China_attitudes_frequency
 
-#### QUESTION 4
+# Question 4 ----
 USA_attitudes_frequency <- df1 %>%
   count(Q78B, name = "Count") %>%
   mutate(
@@ -214,12 +223,12 @@ USA_attitudes_frequency <- df1 %>%
   ) %>%
   select(Response, Count, Percentage)
 
-# Display the table
+# Display the table USA
 USA_attitudes_frequency
 
 
 
-#### QUESTION 5
+# Question 5 ----
 
 # Clean Q78A and Q78B using across
 df_clean <- df1 %>%
