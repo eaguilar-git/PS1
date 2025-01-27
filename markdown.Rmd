@@ -35,7 +35,7 @@ df1 <- read_csv('output file.csv')
 - The responses were collected between `r min(df1$DATEINTR)` and `r max(df1$DATEINTR)`.
 
 ## Question #2
-The ages were between `r min(df1$Q1)` and `r max(df1$Q1)`, with a mean of `r mean(df1$Q1)` and median of `r mean(df1$Q1)`. The other characteristics of the respodants are in the table below. 
+The ages were between `r min(df1$Q1)` and `r max(df1$Q1)`, with a mean of `r mean(df1$Q1)` and median of `r median(df1$Q1)`. The other characteristics of the respodants are in the table below. 
 
 ``` {r, echo = FALSE, fig.cap='Descriptive Statistics Summary'}
 # Display the updated summary table without showing the code
