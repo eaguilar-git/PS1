@@ -35,9 +35,198 @@ df1 <- read_csv('output file.csv')
 - The responses were collected between `r min(df1$DATEINTR)` and `r max(df1$DATEINTR)`.
 
 ## Question #2
+The ages were between `r min(df1$Q1)` and `r max(df1$Q1)`, with a mean of `r mean(df1$Q1)` and median of `r mean(df1$Q1)`. The other characteristics of the respodants are in the table below. 
+
+``` {r, echo = FALSE, fig.cap='Descriptive Statistics Summary'}
+# Display the updated summary table without showing the code
+library(kableExtra)
+
+## Gender ----
+# Show unique values in the GENDER column -- 1 = Man 2 = Woman. -- to check data looks good.
+
+# Replace 1 with "Man" and 2 with "Woman", and calculate percentages
+gender_tibble <- df1 %>%
+  mutate(
+    Q100 = case_when(
+      Q100 == 1 ~ "Man",
+      Q100 == 2 ~ "Woman",
+    )
+  ) %>%
+  count(Q100, name = "Count") %>%  
+  mutate(Percentage = round((Count / sum(Count)) * 100, 2), Category = "Gender")
+
+
+## Region ----
+
+
+region_tibble <- df1 %>%
+  mutate(
+    REGION = case_when(
+      REGION == 1780 ~ "Brazzaville",
+      REGION == 1781 ~ "Pointe-Noire",
+      REGION == 1782 ~ "Kouilou",
+      REGION == 1783 ~ "Niari",
+      REGION == 1784 ~ "Bouenza",
+      REGION == 1785 ~ "Lekoumou",
+      REGION == 1786 ~ "Pool",
+      REGION == 1787 ~ "Plateaux",
+      REGION == 1788 ~ "Cuvette",
+      REGION == 1789 ~ "Cuvette Ouest",
+      REGION == 1790 ~ "Sangha",
+      REGION == 1791 ~ "Likouala ",
+    )
+  ) %>%
+  count(REGION, name = "Count") %>%
+  mutate(Percentage = round((Count/sum(Count))*100, 2), Category = "Region")
+
+
+## Location ----
+
+# Replace 1 with "Urban" and 2 with "Rural", and calculate percentages
+urbrur_tibble <- df1 %>%
+  mutate(
+    URBRUR = case_when(
+      URBRUR == 1 ~ "Urban",
+      URBRUR == 2 ~ "Rural",
+    )
+  ) %>%
+  count(URBRUR, name = "Count") %>%  
+  mutate(Percentage = round((Count / sum(Count)) * 100, 2), Category = "Location") 
+
+
+## Language ----
+
+
+# Replace and calculate categories
+language_tibble <- df1 %>%
+  mutate(
+    Q2 = case_when(
+      Q2 == 2 ~ "Français",
+      Q2 == 1780 ~ "Lingala",
+      Q2 == 1781 ~ "Kituba",
+      Q2 == 1782 ~ "Lari",
+      Q2 == 1783 ~ "Teke",
+      Q2 == 9995 ~ "Other",
+      Q2 == 9998 ~ "A refusé de répondre",
+      Q2 == 9999 ~ "Ne sait pas",
+      Q2 == -1 ~ "Manquant ",
+    )
+  ) %>%
+  count(Q2, name = "Count") %>%  
+  mutate(Percentage = round((Count / sum(Count)) * 100, 2), Category = "Language") 
+
+
+## Summary Disriptive Statistics ----
+# combine tibbles
+summary_table <- bind_rows(
+  gender_tibble,
+  region_tibble,
+  urbrur_tibble,
+  language_tibble
+)
+
+# Merge Q100, REGION, URBRUR, and Q2 into one column called 'Variable'
+updated_summary_table <- summary_table %>%
+  mutate(
+    Variable = coalesce(as.character(Q100), as.character(REGION), as.character(URBRUR), as.character(Q2))  # Combine columns into 'Variable'
+  ) %>%
+  select(Category, Variable, Count, Percentage)  # Rearrange columns to the desired order
+
+# Display the updated table
+updated_summary_table %>%
+  knitr::kable(caption = "Descriptive Statistics Summary Table") %>%
+  kable_styling(full_width = FALSE, bootstrap_options = c("striped", "hover"))
+```
 
 ## Question #3
 
+```{r, echo = FALSE, fig.cap='Attitudes toward China'}
+China_attitudes_frequency <- df1 %>%
+  count(Q78A, name = "Count") %>%
+  mutate(
+    Percentage = round((Count / sum(Count)) * 100, 2),
+    Response = case_when(
+      Q78A == 1 ~ "Very negative",
+      Q78A == 2 ~ "Somewhat negative",
+      Q78A == 3 ~ "Neither positive nor negative",
+      Q78A == 4 ~ "Somewhat positive",
+      Q78A == 5 ~ "Very positive",
+      Q78A == 8 ~ "Refused",
+      Q78A == 9 ~ "Don't know",
+      Q78A == -1 ~ "Missing",
+    )
+  ) %>%
+  select(Response, Count, Percentage)
+
+# Display the table China
+China_attitudes_frequency %>%
+  knitr::kable(
+    caption = "China Attitudes Frequency Table"  # Add a meaningful caption
+  ) %>%
+  kable_styling(
+    full_width = FALSE, 
+    bootstrap_options = c("striped", "hover")  # Add styling options
+  )
+```
+
 ## Question #4
 
+```{r, echo = FALSE, fig.cap='Attitudes toward USA'}
+USA_attitudes_frequency <- df1 %>%
+  count(Q78B, name = "Count") %>%
+  mutate(
+    Percentage = round((Count / sum(Count)) * 100, 2),
+    Response = case_when(
+      Q78B == 1 ~ "Very negative",
+      Q78B == 2 ~ "Somewhat negative",
+      Q78B == 3 ~ "Neither positive nor negative",
+      Q78B == 4 ~ "Somewhat positive",
+      Q78B == 5 ~ "Very positive",
+      Q78B == 8 ~ "Refused",
+      Q78B == 9 ~ "Don't know",
+      Q78B == -1 ~ "Missing",
+    )
+  ) %>%
+  select(Response, Count, Percentage)
+
+# Display the table China
+USA_attitudes_frequency %>%
+  knitr::kable(
+    caption = "USA Attitudes Frequency Table" 
+  ) %>%
+  kable_styling(
+    full_width = FALSE, 
+    bootstrap_options = c("striped", "hover")
+  )
+```
+
 ## Question #5
+
+```{r, echo = FALSE, fig.cap='T-test'}
+# Clean Q78A and Q78B using across
+df_clean <- df1 %>%
+  mutate(
+    across(
+      Q78A:Q78B,  
+      ~ if_else(.x %in% 1:5, .x, NA)
+    )
+  )
+
+# Perform the paired t-test
+t_test_result <- t.test(df_clean$Q78A, df_clean$Q78B, paired = TRUE)
+
+# Clean Q78A and Q78B using across
+df_clean <- df1 %>%
+  mutate(
+    across(
+      Q78A:Q78B,  
+      ~ if_else(.x %in% 1:5, .x, NA)
+    )
+  )
+
+# Perform the paired t-test
+t_test_result <- t.test(df_clean$Q78A, df_clean$Q78B, paired = TRUE)
+
+# Display the t-test result
+t_test_result 
+```
